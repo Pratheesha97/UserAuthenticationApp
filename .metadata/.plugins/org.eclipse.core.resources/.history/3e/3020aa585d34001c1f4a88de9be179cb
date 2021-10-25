@@ -1,0 +1,41 @@
+package com.samadhi.project_wso2;
+
+import java.util.Scanner;
+
+public class UserManagementApp {
+
+	public static void main(String[] args) {
+		
+		String appTitle = "\nWELCOME TO USER MANAGEMENT APPLICATION";
+		System.out.println(appTitle);
+		for(int i = 0; i < appTitle.length(); i++) {       
+                System.out.print("=");    
+        }    
+		
+		System.out.print("\n1. Register User\n2. Login\n3. List all users\n4. Back to main menu\n");
+		
+		try(Scanner scanner = new Scanner(System.in)){
+		        	int selectedOption;
+		        	System.out.print("\nEnter the option number to proceed: ");
+		        	selectedOption = scanner.nextInt();
+		        	
+					while(selectedOption>4 || selectedOption<1) {
+						System.err.println("Invalid Option Number!");
+						System.out.print("Enter the option number to proceed: ");
+			        	selectedOption = scanner.nextInt();
+					}
+					
+		        	switch(selectedOption) {
+		        	case 1: Registration.register(); break;
+		        	case 2: Login.login(); break;
+		        	case 3: Login.login(); break;
+		        	case 4: UserManagementApp.main(args); break;
+		        	
+		        	}
+		        }
+		
+		
+
+	}
+
+}

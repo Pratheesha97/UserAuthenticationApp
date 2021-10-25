@@ -1,0 +1,47 @@
+package com.samadhi.project_wso2;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class LoginDAO {
+	
+	Connection con=null;
+	
+	public void connect() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_management_app_db", "root", "root");
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	public UserAccount authUser(String email, String password) {
+	try {
+		UserAccount user = new UserAccount();
+		String query = "select userID from User where email="+email;
+		
+		connect();
+		
+		Statement st = con.createStatement();
+		
+		ResultSet rs=st.executeQuery(query);
+		
+		//rs.next();
+		user.setUserID(rs.getInt(1));
+		
+		System.out.println("userIDDDDD: "+user.getUserID());
+		
+		st.close();
+		con.close();
+		
+	} catch (Exception e) {
+		System.out.println(e);
+	}
+	
+	return null;
+}
+}

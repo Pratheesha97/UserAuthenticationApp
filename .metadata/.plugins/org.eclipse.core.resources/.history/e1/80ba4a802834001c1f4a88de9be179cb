@@ -1,0 +1,25 @@
+package com.samadhi.project_wso2;
+
+import java.util.Scanner;
+
+public class Login 
+{
+    public static void login()
+    {
+        try(Scanner scanner = new Scanner(System.in)){
+        	
+        	System.out.print("Enter your email address => ");
+        	String email = scanner.nextLine();
+        	
+        	System.out.println("Enter your password => ");
+        	String password = scanner.nextLine();
+        	
+        	if("ramesh".equals(email) && "password".equals(password)) {
+        		System.out.println("User is successfully loggedin...");
+        	} else {
+        		System.out.println("Invalid username or password...");
+        	}
+        }
+    }
+}
+

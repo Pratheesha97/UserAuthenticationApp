@@ -1,0 +1,56 @@
+package com.samadhi.project_wso2;
+
+import java.util.Scanner;
+
+public class Login {
+    public static void login() {
+        try(Scanner scanner = new Scanner(System.in)) {
+        	
+        	System.out.println("\n=========== LOGIN =============");
+        	
+        	System.out.print("Enter your email address=> ");
+			String email = scanner.nextLine();
+        	
+        	System.out.print("Enter your password => ");
+        	String password = scanner.nextLine();
+        	
+        	LoginDAO dao=new LoginDAO();
+        	UserAccount user= dao.authUser(email);
+        	if (user!=null) {
+        		String salt=user.getSalt();
+        		String HashedPw;
+				try {
+					HashedPw = SaltedHashedFunction.getHashedGivenSalt(password,salt);
+					if(HashedPw.equals(user.getSalted_hash())) {
+						System.out.println("Successfully logged in!");
+						dao.updateUserStatus(user.getUserID(), "Login");
+						
+						UserDAO userDAO = new UserDAO();
+						
+						System.out.println("\nHello "+user.getName()+",\n");
+						userDAO.displayUsers();
+						
+						System.out.println("\n\nPress 0 to logout");
+						int optionSelected = scanner.nextInt();
+						
+						if(optionSelected==0) {
+							dao.updateUserStatus(user.getUserID(), "Logout");
+							UserManagementApp.main(null);
+						}
+						
+					} else {
+						System.err.println("Incorrect Password");
+						login();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+        	} else {
+        		System.err.println("User does not exist!");
+        		login();
+        		
+        	}
+        }
+    }
+}
+

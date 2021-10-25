@@ -1,0 +1,65 @@
+package com.samadhi.project_wso2;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class UserDAO {
+	
+	Connection con=null;
+	
+	public void connect() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_management_app_db", "root", "root");
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	public void addUser(UserAccount user) {
+		String query = "insert into User (username,user_pw,email) values (?,?,?)";
+		PreparedStatement pst;
+		try {
+			pst = con.prepareStatement(query);
+			
+			pst.setString(1, user.getName());
+			pst.setString(2, user.getPassword());
+			pst.setString(3, user.getEmail());
+			
+			pst.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		
+	}
+}
+	
+//	public User getUser(int rollNo) {
+//		try {
+//			User s = new Student();
+//			s.rollNo = rollNo;
+//			
+//			String query = "select stdName from student where rollNo="+rollNo;
+//			
+//			Statement st = con.createStatement();
+//			
+//			ResultSet rs=st.executeQuery(query);
+//			
+//			rs.next();
+//			String sname = rs.getString(1);
+//			s.sname=sname;
+//			
+//			st.close();
+//			con.close();
+//			
+//			return s;
+//			
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
+//		
+//		return null;
+//	}
+

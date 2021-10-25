@@ -1,0 +1,70 @@
+package com.samadhi.project_wso2;
+
+import java.util.Scanner;
+
+public class Registration {
+	public static void register() {
+		UserAccount user = new UserAccount();
+	
+		try(Scanner scanner = new Scanner(System.in)){
+			
+			System.out.print("Enter name => ");
+			String name = scanner.nextLine();
+			while (name.isBlank()) {
+				System.err.println("Name can't be empty!");
+				System.out.print("Re-Enter name => ");
+				name = scanner.nextLine();
+			}
+			user.setName(name);
+		
+			System.out.print("Enter email => ");
+			String email = scanner.nextLine();
+			while (email.isBlank() || !(email.contains("@") && email.contains("."))) {
+				if (email.isBlank()) System.err.println("Email can't be empty!");
+				else System.err.println("An email address must contain '@','.' symbols!");
+				System.out.print("Re-Enter email => ");
+				email = scanner.nextLine();
+			}
+			user.setEmail(email);
+			
+			System.out.print("Enter password => ");
+			String newPassword = scanner.nextLine();
+			while (newPassword.isBlank()) {
+				System.err.println("Password can't be empty!");
+				System.out.print("Re-Enter password=> ");
+				newPassword = scanner.nextLine();
+			}	
+			
+			System.out.print("Confirm password => ");
+			String confirmPassword = scanner.nextLine();
+			while (confirmPassword.isBlank() ) {
+				System.err.println("Confirm password can't be empty!");
+				System.out.print("Re-confirm password=> ");
+				confirmPassword = scanner.nextLine();
+			}
+			
+			if (newPassword.equals(confirmPassword)) {
+				String[] hashedResults;
+				try {
+					hashedResults = Hasher.hashing(newPassword);
+					user.setSalted_hash(hashedResults[0]);
+					user.setSalt(hashedResults[1]);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				System.out.println("User Registered Successfully!");
+				UserDAO dao = new UserDAO();
+				dao.connect();
+				dao.addUser(user);
+				
+			} else {
+				System.err.println("Passwords do not match!");
+			}
+			
+		}
+	}
+	
+	
+
+}

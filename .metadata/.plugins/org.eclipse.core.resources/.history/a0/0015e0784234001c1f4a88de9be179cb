@@ -1,0 +1,67 @@
+package com.samadhi.project_wso2;
+
+import java.util.Scanner;
+
+public class Registration {
+	public static void register() {
+		UserAccount user = new UserAccount();
+	
+		try(Scanner scanner = new Scanner(System.in)){
+			
+			System.out.print("Enter name => ");
+			String name = scanner.nextLine();
+			while (!user.validateUserInfo(name)) {
+				System.out.print("Re-Enter name => ");
+				name = scanner.nextLine();
+			}
+			
+		
+			System.out.print("Enter email => ");
+			String email = scanner.nextLine();
+			while (!user.validateUserEmail(email)) {
+				System.out.print("Re-Enter email => ");
+				email = scanner.nextLine();
+			}
+			
+			
+			System.out.print("Enter password => ");
+			String newPassword = scanner.nextLine();
+			while (!user.validateUserInfo(newPassword)) {
+				System.out.print("Re-Enter password=> ");
+				newPassword = scanner.nextLine();
+			}	
+			
+			System.out.print("Confirm password => ");
+			String confirmPassword = scanner.nextLine();
+			while (!user.validateUserInfo(confirmPassword)) {
+				System.out.print("Re-confirm password=> ");
+				confirmPassword = scanner.nextLine();
+			}
+			
+			
+			if (newPassword.equals(confirmPassword)) {
+				String[] hashedPassword;
+				try {
+					hashedPassword = SaltedHashedFunction.getHashedPassword(newPassword);
+					
+					user.setName(name);
+					user.setEmail(email);
+					user.setSalted_hash(hashedPassword[0]);
+					user.setSalt(hashedPassword[1]);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				UserDAO dao = new UserDAO();
+				dao.addUser(user);
+				System.out.println("User Registered Successfully!");
+				
+			} else {
+				System.err.println("Passwords do not match!");
+			}
+			
+		}
+	}
+	
+}

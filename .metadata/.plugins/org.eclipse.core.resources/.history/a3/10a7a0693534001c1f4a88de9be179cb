@@ -1,0 +1,28 @@
+package com.samadhi.project_wso2;
+
+import java.util.Scanner;
+
+public class Login 
+{
+    public static void login() throws Exception
+    {
+        try(Scanner scanner = new Scanner(System.in)){
+        	
+        	System.out.print("Enter your email address => ");
+        	String email = scanner.nextLine();
+        	
+        	System.out.print("Enter your password => ");
+        	String password = scanner.nextLine();
+        	
+        	LoginDAO dao=new LoginDAO();
+        	UserAccount user= dao.authUser(email,password);
+        	if (user!=null) {
+        		String HashedPw=Hasher.getHashedPassword(password,user.getSalt());
+        		System.out.println("hii: "+HashedPw);
+        	} else {
+        		System.out.println("User does not exist!");
+        	}
+        }
+    }
+}
+
